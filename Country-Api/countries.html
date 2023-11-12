@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Show coutries name</title>
+    <style>
+      #countries-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+      }
+      .childDivClass {
+        border: 2px solid tomato;
+        padding: 10px;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="" id="country-detail"></div>
+    <button onclick="countriesLoader()">Add countries</button>
+    <div class="" id="countries-container"></div>
+
+    <script>
+      function countriesLoader() {
+        fetch("https://restcountries.com/v3.1/all")
+          .then((res) => res.json())
+          .then((data) => displayCountries(data));
+      }
+
+      function displayCountries(countries) {
+        const div = document.getElementById("countries-container");
+        // console.log(countries[0].capital[0]);
+        countries.forEach((country) => {
+          // console.log(country.cca2);
+          const childDiv = document.createElement("div");
+          childDiv.classList.add("childDivClass");
+          childDiv.innerHTML = `<h1>${country.name.common}</h1>
+            <p>Capital: ${country.capital ? country.capital : "No Capital"}</p>
+            <button onclick="countryDetails('${country.cca2}')">Details</button>
+            `;
+          div.appendChild(childDiv);
+        //   console.log(country.capital);
+        });
+      }
+      const countryDetails = (code) => {
+        const url = `https://restcountries.com/v3.1/alpha/${code}`
+        fetch(url)
+        .then(res => res.json())
+        .then(data => showCountry(data[0]))
+      };
+      const showCountry = country => {
+        console.log(country);
+        const detailsContainer = document.getElementById('country-detail');
+        detailsContainer.innerHTML = `
+            <h3>${country.name.common}</h3>
+            <img src="${country.flags.png}"/>
+        `
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shoping Card save in Local storage</title>
+  </head>
+  <body>
+    <input id="inputName" type="text" />
+    <input id="inputQuantity" type="text" />
+    <button id="btn" onclick="takeInputValue()">Add</button>
+    <u id="display"></u>
+
+    <script>
+      const takeInputValue = () => {
+        const inputName = document.getElementById("inputName");
+        const inputQuantity = document.getElementById("inputQuantity");
+
+        const nameValue = inputName.value;
+        const quantityValue = inputQuantity.value;
+
+        inputName.value = "";
+        inputQuantity.value = "";
+
+        // console.log(nameValue, quantityValue);
+        showInputValue(nameValue, quantityValue);
+        saveProductToLocalStorage(nameValue, quantityValue)
+      };
+
+      const showInputValue = (nameValue, quantityValue) => {
+        const display = document.getElementById("display");
+        const li = document.createElement("li");
+        li.innerText = `Name: ${nameValue} Quantiti: ${quantityValue}`;
+        display.appendChild(li);
+      };
+
+      const getStoredShppingCart = () => {
+        let cart = {}
+        const storedCart = localStorage.getItem('cart')
+        if(storedCart) {
+            cart = JSON.parse(storedCart)
+        }
+        return cart;
+      }
+
+      const saveProductToLocalStorage = (nameValue, quantityValue) => {
+        const cart = getStoredShppingCart()
+        console.log(cart);
+        cart[nameValue] = quantityValue;
+        const cartSringified = JSON.stringify(cart)
+        console.log(cartSringified);
+        localStorage.setItem("cart", cartSringified)
+      }
+
+      const displayProductFromLocalStorage = () => {
+        const savedCart = getStoredShppingCart()
+        // console.log(savedCart);
+        for(const product in savedCart) {
+            // console.log(product);
+            const quitity = savedCart[product]
+            console.log(product, quitity);
+
+            showInputValue(product, quitity)
+        }
+      }
+      displayProductFromLocalStorage()
+
+      const person = {
+        name: "imran",
+        age: "23",
+        25: "catagory",
+        "son-name": 5,
+      };
+
+      console.log(person);
+
+    
+    </script>
+  </body>
+</html>
